@@ -1,4 +1,4 @@
-use bitcoincore_rpc::{ json, Auth, Client, RpcApi};
+use bitcoincore_rpc::{ bitcoin::{util::amount, Amount}, json, Auth, Client, RpcApi};
 fn main() {
     //connect to node
     let rpc_auth = Auth::UserPass("user".to_string(), "password".to_string());
@@ -22,5 +22,23 @@ fn main() {
         .unwrap();
     println!("my address: {:?}", my_address);
 
-
+    //select first UTXO
+    let unspent = rpc
+        .list_unspent(
+            None,
+            None,
+            None,
+            None,
+            Option::Some(json::ListUnspentQueryOptions {
+                minimum_amount: Option::Some(Amount::from_btc(0.00000001).unwrap()),
+                maximum_amount: None,
+                maximum_count: None,
+                minimum_sum_amount: None,
+            }),
+        )
+        .unwrap();
+    
+    let selected_tx = &unspent[0];
+    
+    println!("selected unspent transaction: {:#?}", selected_tx);
 }
