@@ -1,0 +1,7 @@
+[package]
+name = "bitcoincore-rpc"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bitcoincore-rpc = "0.11.0"
